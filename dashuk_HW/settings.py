@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
 import os
 from pathlib import Path
 
@@ -21,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-fxzvk@#lfms2$508e)%_8ol$a2&u&xpwr1m9f^^qtr*&h2gzky'
+SECRET_KEY = 'django-insecure-npw%0##&9bjid90iu@a^x(c^(z*s3#m@%=4m^*2)9l199pc^f)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -74,6 +73,7 @@ WSGI_APPLICATION = 'dashuk_HW.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
+
 	'default': {
 		'ENGINE': 'django.db.backends.postgresql',
 		'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
