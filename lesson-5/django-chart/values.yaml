@@ -1,0 +1,29 @@
+# Default values for django-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 2
+
+image:
+  repository: 940482416787.dkr.ecr.eu-north-1.amazonaws.com/dashuk-ecr-lesson5
+  tag: latest
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 8000
+
+hpa:
+  minReplicas: 2
+  maxReplicas: 5 # Changed from 6 to 5 as per current hpa.yaml
+  targetCPUUtilizationPercentage: 80
+
+config:
+  secretKey: "django-insecure-fxzvk@#lfms2$508e)%_8ol$a2&u&xpwr1m9f^^qtr*&h2gzky"
+  debug: "True"
+  allowedHosts: "*"
+  postgresHost: "localhost"
+  postgresPort: "5432"
+  postgresName: "postgres"
+  postgresUser: "postgres"
+  postgresPassword: ""
