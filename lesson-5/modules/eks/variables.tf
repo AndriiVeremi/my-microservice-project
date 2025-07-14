@@ -1,39 +1,39 @@
+variable "region" {
+  description = "AWS регіон для розгортання"
+  type        = string
+  default     = "ap-southeast-1"
+}
+
 variable "cluster_name" {
-  description = "The name of the EKS cluster."
+  description = "Назва EKS кластера"
   type        = string
 }
 
 variable "subnet_ids" {
-  description = "A list of subnet IDs to use for the EKS cluster."
+  description = "Список ID підмереж для EKS кластера"
   type        = list(string)
 }
 
-variable "desired_capacity" {
-  description = "The desired number of worker nodes."
+variable "instance_type" {
+  description = "Тип EC2 інстансів для робочих вузлів"
+  type        = string
+  default     = "t3.medium"
+}
+
+variable "desired_size" {
+  description = "Бажана кількість робочих вузлів"
   type        = number
   default     = 2
 }
 
 variable "max_size" {
-  description = "The maximum number of worker nodes."
+  description = "Максимальна кількість робочих вузлів"
   type        = number
-  default     = 3
+  default     = 4
 }
 
 variable "min_size" {
-  description = "The minimum number of worker nodes."
+  description = "Мінімальна кількість робочих вузлів"
   type        = number
   default     = 1
-}
-
-variable "instance_types" {
-  description = "The instance types for the worker nodes."
-  type        = list(string)
-  default     = ["t3.medium"]
-}
-
-variable "tags" {
-  description = "A map of tags to assign to the resources."
-  type        = map(string)
-  default     = {}
 }

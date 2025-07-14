@@ -1,9 +1,9 @@
 variable "bucket_name" {
-  description = "The name of the S3 bucket"
+  description = "Назва S3 бакету"
   type        = string
 }
 
 variable "table_name" {
-  description = "The name of the DynamoDB table"
+  description = "Назва таблиці DynamoDB"
   type        = string
 }

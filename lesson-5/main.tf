@@ -23,18 +23,57 @@ resource "random_id" "suffix" {
 }
 
 module "ecr" {
-  source           = "./modules/ecr"
-  repository_name  = "dashuk-ecr-lesson5"
-  scan_on_push = true
+  source          = "./modules/ecr"
+  repository_name = "dashuk-ecr-lesson5"
+  scan_on_push    = true
 }
 
 module "eks" {
-  source       = "./modules/eks"
-  cluster_name = "dashuk-eks-lesson5"
-  subnet_ids   = module.vpc.public_subnets_ids
+  source        = "./modules/eks"
+  cluster_name  = "dashuk-eks-lesson5"
+  subnet_ids    = module.vpc.public_subnets_ids
+  instance_type = "t3.medium"
+  desired_size  = 2
+  max_size      = 6
+  min_size      = 2
+}
 
-  tags = {
-    Name    = "Dashuk EKS Cluster"
-    Project = "Lesson 5"
+data "aws_eks_cluster" "eks" {
+  name = module.eks.eks_cluster_name
+}
+
+data "aws_eks_cluster_auth" "eks" {
+  name = module.eks.eks_cluster_name
+}
+
+# Helm provider configured to talk to the EKS cluster
+provider "kubernetes" {
+  host                   = data.aws_eks_cluster.eks.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.eks.token
+}
+
+provider "helm" {
+  kubernetes {
+    host                   = data.aws_eks_cluster.eks.endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
+    token                  = data.aws_eks_cluster_auth.eks.token
   }
+}
+
+module "argo_cd" {
+  source        = "./modules/argo_cd"
+  name          = "argo-cd"
+  namespace     = "argocd"
+  chart_version = "5.46.4"
+  cluster_name      = module.eks.eks_cluster_name
+  oidc_provider_arn = module.eks.oidc_provider_arn
+  oidc_provider_url = module.eks.oidc_provider_url
+}
+
+module "jenkins" {
+  source            = "./modules/jenkins"
+  cluster_name      = module.eks.eks_cluster_name
+  oidc_provider_arn = module.eks.oidc_provider_arn
+  oidc_provider_url = module.eks.oidc_provider_url
 }
