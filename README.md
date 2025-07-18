@@ -6,11 +6,12 @@
 
 Проєкт складається з таких компонентів:
 
--   **Terraform**: для створення базової інфраструктури в AWS (VPC, EKS, ECR, S3, DynamoDB).
+-   **Terraform**: для створення базової інфраструктури в AWS (VPC, EKS, ECR, S3, DynamoDB, RDS).
 -   **Docker**: для контейнеризації Django-додатку.
 -   **Jenkins**: для автоматизації збірки та тестування.
 -   **Helm**: для пакування Kubernetes-додатку.
 -   **Argo CD**: для безперервного розгортання в Kubernetes.
+-   **AWS RDS**: для створення та управління реляційною базою даних.
 
 ## Покрокова інструкція з розгортання
 
@@ -44,7 +45,7 @@
 
 -   **Перевірка в AWS Console:**
     -   Перейдіть до консолі AWS.
-    -   Переконайтеся, що створено новий VPC, EKS-кластер, ECR-репозиторій, S3-бакет та таблицю DynamoDB.
+    -   Переконайтеся, що створено новий VPC, EKS-кластер, ECR-репозиторій, S3-бакет, таблицю DynamoDB та базу даних RDS.
 -   **Перевірка за допомогою AWS CLI:**
     ```bash
     # Перевірка EKS-кластера
@@ -52,8 +53,11 @@
 
     # Перевірка ECR-репозиторію
     aws ecr --region eu-north-1 describe-repositories --repository-names <YOUR_REPO_NAME>
+    
+    # Перевірка бази даних RDS
+    aws rds --region eu-north-1 describe-db-instances --db-instance-identifier <YOUR_DB_INSTANCE_NAME>
     ```
-    (Замініть `<YOUR_CLUSTER_NAME>` та `<YOUR_REPO_NAME>` на реальні імена з ваших Terraform-змінних).
+    (Замініть `<YOUR_CLUSTER_NAME>`, `<YOUR_REPO_NAME>` та `<YOUR_DB_INSTANCE_NAME>` на реальні імена з ваших Terraform-змінних).
 
 ### Крок 2: Налаштування Jenkins та Argo CD
 

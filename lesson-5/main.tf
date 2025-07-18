@@ -46,7 +46,6 @@ data "aws_eks_cluster_auth" "eks" {
   name = module.eks.eks_cluster_name
 }
 
-# Helm provider configured to talk to the EKS cluster
 provider "kubernetes" {
   host                   = data.aws_eks_cluster.eks.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
@@ -77,3 +76,33 @@ module "jenkins" {
   oidc_provider_arn = module.eks.oidc_provider_arn
   oidc_provider_url = module.eks.oidc_provider_url
 }
+
+module "rds" {
+   source = "./modules/rds"
+   name            = "dashuk-rds-lesson5"
+   use_aurora      = false       
+   engine          = "postgres"
+   engine_version  = "17.2"
+   engine_cluster  = "aurora-postgresql"
+   engine_version_cluster = "15.3"
+   instance_class  = "db.t3.medium"
+   allocated_storage = 20
+   db_name         = "dashuk_db_lesson5"
+   username        = "postgres"
+   password        = "admin"
+   vpc_id          = module.vpc.vpc_id
+   subnet_private_ids = module.vpc.private_subnets
+   subnet_public_ids  = module.vpc.public_subnets
+   publicly_accessible = false
+   multi_az         = true
+   backup_retention_period = 7
+   parameters      = {
+     max_connections            = "200"
+     log_min_duration_statement = "500"
+   }
+   aurora_replica_count = 1
+   tags           = {
+     Environment = "dev"
+     Project     = "dashuk-lesson5"
+   }
+ }
