@@ -61,10 +61,10 @@ provider "helm" {
 }
 
 module "argo_cd" {
-  source        = "./modules/argo_cd"
-  name          = "argo-cd"
-  namespace     = "argocd"
-  chart_version = "5.46.4"
+  source            = "./modules/argo_cd"
+  name              = "argo-cd"
+  namespace         = "argocd"
+  chart_version     = "5.46.4"
   cluster_name      = module.eks.eks_cluster_name
   oidc_provider_arn = module.eks.oidc_provider_arn
   oidc_provider_url = module.eks.oidc_provider_url
@@ -106,3 +106,8 @@ module "rds" {
      Project     = "dashuk-lesson5"
    }
  }
+
+module "prometheus" {
+  source = "./modules/prometheus"
+}
+
